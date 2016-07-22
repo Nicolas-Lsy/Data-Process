@@ -4,7 +4,7 @@
 
 int main(void)
 {	
-	FILE *fp1,*fp2,*fp3,*fp4,*fp5,*fp6;                             //井数据.xlsx文件，需另存为.csv文件
+	FILE *fp1,*fp2,*fp3,*fp4,*fp5,*fp6,*fp;                             //井数据.xlsx文件，需另存为.csv文件
 	double DEPTH,AC,DEN,V,T = 1712;                                 //深度（DEPTH）,声波时差（AC）,密度（DEN）,T的初始值
 	double DEPTH_1 = 50.01,DEPTH_2,temp_1,temp_2,V_last;                   //DEPTH_1初始值
 	char line[50];                                                  //读取每行csv数据
@@ -129,27 +129,31 @@ int i=1,L=25,N=0,n=1;                                                    // L子
 double num_Z[500], num_T[500],num_R[500],num_b[500],S = 0;
 
 
-
+fp = fopen("Z.txt", "w"); 
 fp3 = fopen("new_T_2.csv", "r"); 
 	while(fgets(line,500,fp3))                                          //读取new_T_2.csv文件
 	{
 		sscanf(line,"%lf,%lf,%lf,%lf", &DEPTH,&T,&V,&DEN);
 		num_Z[i] = V * DEN;                                              //求得Z值
 		printf("Test Z[%d] = %lf\n", i,num_Z[i]);                       //测试代码 可删除
+		fprintf(fp,"Z[%d] = %lf\n", i,num_Z[i]); 
 		num_T[i] = T;                                                   //对于T值
 		i++;
 		N = i-1;                                                        //Z的个数N  114
 		count = N;
 	}
 	fclose(fp3);
-
-
+	fclose(fp);
+	
+	
+fp = fopen("R.txt", "w"); 
 for(i = 1; i<N; i++){
 	num_R[i] = (num_Z[i+1]-num_Z[i])/(num_Z[i+1]+num_Z[i]);
-	printf("Test R[%d] = %lf\n", i,num_R[i]);                           //测试代码 可删除
+	printf("Test R[%d] = %lf\n", i,num_R[i]);                       	//测试代码 可删除
+	fprintf(fp," R[%d] = %lf\n", i,num_R[i]);
 	}                                                                   //求取R,个数N 113
 	N = N - 1;                                                         //R的个数 比Z少1
-
+	fclose(fp);
 
 
 
@@ -190,4 +194,3 @@ fp6 = fopen("new_S.txt", "w");                                     //写入S记�
 5.对应文件名可以自行修改  
 *******************************************/
 
- 
